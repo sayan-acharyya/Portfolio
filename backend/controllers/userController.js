@@ -3,6 +3,8 @@ import ErrorHandler from "../middlewares/error.js"
 import { User } from "../models/userSchema.js";
 import { v2 as cloudinary } from "cloudinary"
 import { generateToken } from "../utils/jwtToken.js";
+import { sendEmail } from "../utils/sendEmail.js";
+import crypto from "crypto";
 
 export const register = catchAsyncErrors(async (req, res, next) => {
   if (!req.files || Object.keys(req.files).length === 0) {
@@ -197,13 +199,117 @@ export const updatePassword = catchAsyncErrors(async (req, res, next) => {
 })
 
 export const getUserForPortfolio = catchAsyncErrors(async (req, res, next) => {
-    const id = "6951052dc34568f8f78aa902";
+  const id = "6951052dc34568f8f78aa902";
 
-    const user = await User.findById(id);
-    res.status(200).json({
-      success:true,
-      user
-    })
+  const user = await User.findById(id);
+  res.status(200).json({
+    success: true,
+    user
+  })
 })
 
- 
+export const forgetPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required",
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Generate reset token
+    const resetToken = user.getResetPasswordToken();
+    await user.save({ validateBeforeSave: false });
+
+    const resetPasswordUrl = `${process.env.DASHBOARD_URI}/password/reset/${resetToken}`;
+
+    const message = `Hello ${user.fullName},
+
+You requested a password reset. Click the link below to reset your password:
+
+${resetPasswordUrl}
+
+If you did not request this, please ignore this email.
+`;
+
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: "Personal Portfolio Dashboard Password Recovery",
+        message,
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: `Email sent to ${user.email} successfully`,
+      });
+
+    } catch (emailError) {
+      console.log("Email sending error:", emailError);
+
+      // rollback token
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save({ validateBeforeSave: false });
+
+      return res.status(500).json({
+        success: false,
+        message: "Failed to send reset password email. Please try again.",
+      });
+    }
+
+  } catch (error) {
+    console.log("Server error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong. Please try again.",
+    });
+  }
+};
+
+
+export const resetPassword = catchAsyncErrors(async (req, res, next) => {
+
+  const { token } = req.params;
+
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(token)
+    .digest("hex")
+
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(
+      new ErrorHandler(
+        "Reset password token is invalid or has been expired.",
+        400
+      )
+    );
+  }
+
+  if (req.body.password !== req.body.confirmPassword) {
+    return next(new ErrorHandler("Password & Confirm Password do not match"));
+  }
+  user.password = await req.body.password;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+
+  await user.save({ validateBeforeSave: false });
+
+  generateToken(user, "Reset Password Successfully!", 200, res);
+})
