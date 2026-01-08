@@ -40,7 +40,7 @@ export default function LoginForm() {
   return (
     <div className="w-full lg:grid lg:min-h-[100vh] lg:grid-cols-2">
       {/* Left Side - Form */}
-      <div className="flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="flex items-center justify-center bg-white dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
             <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white">
@@ -114,11 +114,11 @@ export default function LoginForm() {
       </div>
 
       {/* Right Side - Image */}
-      <div className="hidden lg:flex justify-center items-center bg-blue-50 dark:bg-gray-800">
+      <div className="hidden lg:flex justify-center items-center bg-white dark:bg-gray-800">
         <img
-          src="https://img.freepik.com/free-vector/secure-login-concept-illustration_114360-6324.jpg?w=740&t=st=1698672000~exp=1698672600~hmac=5f3c1c88c8c1b1f7c3e091b623b9f19a2f8dc0c68c9f5c1deab2e1a1b45e1d14"
-          alt="Secure Login"
-          className="max-w-md rounded-lg shadow-lg"
+        src="https://static.vecteezy.com/system/resources/previews/005/163/927/non_2x/login-success-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-vector.jpg"
+           alt="Secure Login"
+          
         />
       </div>
     </div>
