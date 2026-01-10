@@ -115,7 +115,7 @@ export const getUser = catchAsyncErrors(async (req, res, next) => {
   })
 })
 
-export const updateProfile = catchAsyncErrors(async (req, res, next) => {
+ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   const newUserData = {
     fullName: req.body.fullName,
     email: req.body.email,
@@ -128,50 +128,60 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
     twitterURL: req.body.twitterURL,
     linkedInURL: req.body.linkedInURL,
   };
-  if (req.files && req.files.avatar) {
-    const avatar = req.files.avatar;
-    const user = await User.findById(req.user.id);
-    const profileImageId = user.avatar.public_id;
-    await cloudinary.uploader.destroy(profileImageId);
-    const newProfileImage = await cloudinary.uploader.upload(
-      avatar.tempFilePath,
-      {
-        folder: "AVATARS",
-      }
-    );
-    newUserData.avatar = {
-      public_id: newProfileImage.public_id,
-      url: newProfileImage.secure_url,
-    };
-  }
 
-  if (req.files && req.files.resume) {
-    const resume = req.files.resume;
-    const user = await User.findById(req.user.id);
-    const resumeFileId = user.resume.public_id;
-    if (resumeFileId) {
-      await cloudinary.uploader.destroy(resumeFileId);
+  const user = await User.findById(req.user.id);
+
+  /* ===================== AVATAR ===================== */
+  if (req.files?.avatar) {
+    // delete old avatar ONLY if it exists
+    if (user.avatar?.public_id) {
+      await cloudinary.uploader.destroy(user.avatar.public_id);
     }
-    const newResume = await cloudinary.uploader.upload(resume.tempFilePath, {
-      folder: "MY_RESUME",
-    });
-    newUserData.resume = {
-      public_id: newResume.public_id,
-      url: newResume.secure_url,
+
+    const uploadedAvatar = await cloudinary.uploader.upload(
+      req.files.avatar.tempFilePath,
+      { folder: "AVATARS" }
+    );
+
+    newUserData.avatar = {
+      public_id: uploadedAvatar.public_id,
+      url: uploadedAvatar.secure_url,
     };
   }
 
-  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
+  /* ===================== RESUME ===================== */
+  if (req.files?.resume) {
+    if (user.resume?.public_id) {
+      await cloudinary.uploader.destroy(user.resume.public_id);
+    }
+
+    const uploadedResume = await cloudinary.uploader.upload(
+      req.files.resume.tempFilePath,
+      { folder: "MY_RESUME" }
+    );
+
+    newUserData.resume = {
+      public_id: uploadedResume.public_id,
+      url: uploadedResume.secure_url,
+    };
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    newUserData,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
   res.status(200).json({
     success: true,
     message: "Profile Updated!",
-    user,
+    user: updatedUser,
   });
 });
+
 
 export const updatePassword = catchAsyncErrors(async (req, res, next) => {
   const { currentPassword, newPassword, confirmNewPassword } = req.body;
