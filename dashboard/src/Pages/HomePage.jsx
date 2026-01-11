@@ -66,7 +66,7 @@ const HomePage = () => {
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 hidden w-14 flex-col border-r bg-background sm:flex z-50">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-          <Link className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base">
+          <Link className="group bg-blue-600 flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full   text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base">
             <Package2 className="h-4 w-4 transition-all group-hover:scale-110" />
             <span className="sr-only">Acme Inc</span>
           </Link>
@@ -75,7 +75,7 @@ const HomePage = () => {
               <TooltipTrigger asChild>
                 <Link
                   className={`flex h-9 w-9 items-center justify-center rounded-lg ${active === "Dashboard"
-                    ? "text-accent-foreground bg-accent"
+                    ? "text-accent-foreground bg-blue-100"
                     : "text-muted-foreground"
                     }  transition-colors hover:text-foreground md:h-8 md:w-8`}
                   onClick={() => setActive("Dashboard")}
@@ -93,7 +93,7 @@ const HomePage = () => {
               <TooltipTrigger asChild>
                 <Link
                   className={`flex h-9 w-9 items-center justify-center rounded-lg ${active === "Add Project"
-                    ? "text-accent-foreground bg-accent"
+                    ? "text-accent-foreground bg-blue-100"
                     : "text-muted-foreground"
                     }  transition-colors hover:text-foreground md:h-8 md:w-8`}
                   onClick={() => setActive("Add Project")}
@@ -111,7 +111,7 @@ const HomePage = () => {
               <TooltipTrigger asChild>
                 <Link
                   className={`flex h-9 w-9 items-center justify-center rounded-lg ${active === "Add Skill"
-                    ? "text-accent-foreground bg-accent"
+                    ? "text-accent-foreground bg-blue-100"
                     : "text-muted-foreground"
                     }  transition-colors hover:text-foreground md:h-8 md:w-8`}
                   onClick={() => setActive("Add Skill")}
@@ -129,7 +129,7 @@ const HomePage = () => {
               <TooltipTrigger asChild>
                 <Link
                   className={`flex h-9 w-9 items-center justify-center rounded-lg ${active === "Add Uses"
-                    ? "text-accent-foreground bg-accent"
+                    ? "text-accent-foreground bg-blue-100"
                     : "text-muted-foreground"
                     }  transition-colors hover:text-foreground md:h-8 md:w-8`}
                   onClick={() => setActive("Add Uses")}
@@ -146,7 +146,7 @@ const HomePage = () => {
               <TooltipTrigger asChild>
                 <Link
                   className={`flex h-9 w-9 items-center justify-center rounded-lg ${active === "Add Timeline"
-                    ? "text-accent-foreground bg-accent"
+                    ? "text-accent-foreground bg-blue-100"
                     : "text-muted-foreground"
                     }  transition-colors hover:text-foreground md:h-8 md:w-8`}
                   onClick={() => setActive("Add Timeline")}
@@ -163,7 +163,7 @@ const HomePage = () => {
               <TooltipTrigger asChild>
                 <Link
                   className={`flex h-9 w-9 items-center justify-center rounded-lg ${active === "Messages"
-                    ? "text-accent-foreground bg-accent"
+                    ? "text-accent-foreground bg-blue-100"
                     : "text-muted-foreground"
                     }  transition-colors hover:text-foreground md:h-8 md:w-8`}
                   onClick={() => setActive("Messages")}
@@ -180,7 +180,7 @@ const HomePage = () => {
               <TooltipTrigger asChild>
                 <Link
                   className={`flex h-9 w-9 items-center justify-center rounded-lg ${active === "Account"
-                    ? "text-accent-foreground bg-accent"
+                    ? "text-accent-foreground bg-blue-100"
                     : "text-muted-foreground"
                     }  transition-colors hover:text-foreground md:h-8 md:w-8`}
                   onClick={() => setActive("Account")}

@@ -20,7 +20,7 @@ const Account = () => {
                                 href="#"
                                 className={
                                     selectedComponent === "Profile"
-                                        ? "font-semibold text-primary"
+                                        ? "font-semibold text-blue-500"
                                         : ""
                                 }
                                 onClick={() => setSelectedComponent("Profile")}
@@ -31,7 +31,7 @@ const Account = () => {
                                 href="#"
                                 className={
                                     selectedComponent === "Update Profile"
-                                        ? "font-semibold text-primary"
+                                        ? "font-semibold text-blue-500"
                                         : ""
                                 }
                                 onClick={() => setSelectedComponent("Update Profile")}
@@ -42,7 +42,7 @@ const Account = () => {
                                 href="#"
                                 className={
                                     selectedComponent === "Update Password"
-                                        ? "font-semibold text-primary"
+                                        ? "font-semibold text-blue-500"
                                         : ""
                                 }
                                 onClick={() => setSelectedComponent("Update Password")}

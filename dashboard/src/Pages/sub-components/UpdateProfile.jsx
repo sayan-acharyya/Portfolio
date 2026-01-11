@@ -238,7 +238,7 @@ const UpdateProfile = () => {
               {!loading ? (
                 <Button
                   onClick={() => handleUpdateProfile()}
-                  className="w-full"
+                  className="w-full bg-blue-500 hover:bg-blue-600"
                 >
                   Update Profile
                 </Button>
