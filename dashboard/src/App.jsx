@@ -14,6 +14,7 @@ import UpdateProject from "./Pages/UpdateProject";
 import { useDispatch } from "react-redux";
 import { getUser } from "./store/slices/userSlice.js";
 import { getAllMessages } from "./store/slices/messagesSlice";
+import { getAllTimeline } from "./store/slices/timeline";
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
   useEffect(() => {
     dispatch(getUser());
     dispatch(getAllMessages());
+    dispatch(getAllTimeline());
   }, []);
 
   return (
