@@ -17,6 +17,7 @@ import { getAllMessages } from "./store/slices/messagesSlice";
 import { getAllTimeline } from "./store/slices/timeline";
 import { getAllSkills } from "./store/slices/skillSlice";
 import { getAllSoftwareApplications } from "./store/slices/softwareApplications";
+import { getAllProjects } from "./store/slices/projectSlice";
 
 function App() {
 
@@ -28,7 +29,7 @@ function App() {
     dispatch(getAllTimeline());
     dispatch(getAllSkills());
     dispatch(getAllSoftwareApplications());
-    
+    dispatch(getAllProjects());
   }, []);
 
   return (
