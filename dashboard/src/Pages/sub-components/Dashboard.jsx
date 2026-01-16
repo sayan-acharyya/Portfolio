@@ -21,12 +21,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
+import { DeleteIcon, Trash } from "lucide-react";
 
 const Dashboard = () => {
   const { user } = useSelector((state) => state.user);
   const { projects } = useSelector((state) => state.project);
   const { skills } = useSelector((state) => state.skill);
-   const {softwareApplications} = useSelector((state) => state.softwareApplications);
+  const { softwareApplications } = useSelector((state) => state.softwareApplications);
+  const { timeline } = useSelector((state) => state.timeline);
   return (
     <div className="min-h-screen bg-muted/40 p-4 sm:p-6 lg:p-8 ">
       <main className="grid gap-6 lg:grid-cols-2 xl:grid-cols-2">
@@ -243,9 +245,75 @@ const Dashboard = () => {
                     </TableRow>
 
                     <TableBody>
-                       {
-                        
-                       }
+                      {
+                        softwareApplications && softwareApplications.length > 0 ? (
+                          softwareApplications.map((element) => (
+                            <TableRow className={"bg-accent "} key={element._id}>
+                              <TableCell>{element.name}</TableCell>
+                              <TableCell>
+                                <img
+                                  className="w-12 h-10 "
+                                  src={element.svg && element.svg.url}
+                                  alt={element.name} />
+                              </TableCell>
+                              <TableCell>
+                                <Button className={"bg-red-600  h-10 w-10 rounded-full hover:bg-red-700"}> <Trash /></Button>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        ) : (
+                          <TableRow>
+                            <TableCell className={"text-3xl overflow-y-hidden "}>
+                              you have not added any software.
+                            </TableCell>
+                          </TableRow>
+                        )
+                      }
+
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className={"px-7 flex items-center justify-between flex-row"}>
+                  <CardTitle className={"text-2xl font-semibold"}>Timeline</CardTitle>
+                  <Link to={"/manage/timeline"}>
+                    <Button className={"bg-blue-600 hover:bg-blue-700 text-white font-semibold"}> Manage Timeline</Button>
+                  </Link>
+                </CardHeader>
+
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Title</TableHead>
+                        <TableHead>From</TableHead>
+                        <TableHead>To</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {
+                        timeline && timeline.length > 0 ? (
+                          timeline.map((element) => (
+                            <TableRow key={element._id} className={"bg-accent"}>
+                              <TableCell className={"font-medium "}>{element.title}</TableCell>
+                              <TableCell className={"md:table-cell "}>{element.timeline.from}</TableCell>
+                              <TableCell className={"md:table-cell  text-right"}>{element.timeline.to ? `${element.timeline.to}`:"Present"}</TableCell>
+                            </TableRow>
+                          ))
+                        ) : (
+                          <TableRow>
+                            <TableCell
+                              colSpan={3}
+                              className="text-3xl text-center overflow-y-hidden"
+                            >
+                              You have not added any timeline.
+                            </TableCell>
+                          </TableRow>
+                        )
+                      }
+
                     </TableBody>
                   </Table>
                 </CardContent>
