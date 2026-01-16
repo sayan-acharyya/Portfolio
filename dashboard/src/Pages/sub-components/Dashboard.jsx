@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -20,14 +20,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Progress } from "@/components/ui/progress";
 
 const Dashboard = () => {
   const { user } = useSelector((state) => state.user);
   const { projects } = useSelector((state) => state.project);
   const { skills } = useSelector((state) => state.skill);
-
+   const {softwareApplications} = useSelector((state) => state.softwareApplications);
   return (
-    <div className="min-h-screen bg-muted/40 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-muted/40 p-4 sm:p-6 lg:p-8 ">
       <main className="grid gap-6 lg:grid-cols-2 xl:grid-cols-2">
         <div className="grid auto-rows-max gap-6 lg:col-span-2">
           {/* TOP CARDS */}
@@ -36,7 +37,7 @@ const Dashboard = () => {
             <Card className="sm:col-span-2 shadow-sm ml-10">
               <CardHeader className="space-y-2">
                 <CardTitle className="text-lg">About Me</CardTitle>
-                <CardDescription className="max-w-lg leading-relaxed line-clamp-4">
+                <CardDescription className="max-w-lg leading-relaxed line-clamp-4 text-gray-800">
                   {user?.aboutMe || "No description added yet."}
                 </CardDescription>
               </CardHeader>
@@ -55,7 +56,7 @@ const Dashboard = () => {
             {/* PROJECTS COUNT */}
             <Card className="flex flex-col justify-between shadow-sm hover:shadow-md transition">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">
+                <CardTitle className="text-lg text-gray-900 font-semibold">
                   Projects Completed
                 </CardTitle>
                 <div className="text-5xl font-bold">
@@ -65,7 +66,7 @@ const Dashboard = () => {
 
               <CardFooter>
                 <Link to="/manage/projects" className="w-full">
-                  <Button variant="outline" className="w-full ">
+                  <Button variant="outline" className="w-full bg-blue-600 text-white font-semibold ">
                     Manage Projects
                   </Button>
                 </Link>
@@ -75,7 +76,7 @@ const Dashboard = () => {
             {/* SKILLS COUNT */}
             <Card className="flex flex-col justify-between shadow-sm hover:shadow-md transition">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-muted-foreground">
+                <CardTitle className="text-lg text-gray-900 font-semibold">
                   Skills
                 </CardTitle>
                 <div className="text-5xl font-bold">
@@ -85,7 +86,7 @@ const Dashboard = () => {
 
               <CardFooter>
                 <Link to="/manage/skills" className="w-full">
-                  <Button variant="outline" className="w-full">
+                  <Button variant="outline" className="w-full bg-blue-600 text-white font-semibold">
                     Manage Skills
                   </Button>
                 </Link>
@@ -96,9 +97,9 @@ const Dashboard = () => {
           {/* PROJECTS TABLE */}
           <Tabs defaultValue="projects">
             <TabsContent value="projects">
-              <Card className="shadow-sm">
-                <CardHeader className="px-6">
-                  <CardTitle className="text-lg">Projects</CardTitle>
+              <Card className="shadow-sm ml-10">
+                <CardHeader className="px-8">
+                  <CardTitle className="text-2xl">Projects</CardTitle>
                 </CardHeader>
 
                 <CardContent className="px-6">
@@ -134,11 +135,10 @@ const Dashboard = () => {
 
                             <TableCell className="hidden md:table-cell">
                               <span
-                                className={`px-2 py-1 rounded text-xs font-medium ${
-                                  project.deployed
-                                    ? "bg-green-100 text-green-700"
-                                    : "bg-red-100 text-red-700"
-                                }`}
+                                className={`px-2 py-1 rounded text-xs font-medium ${project.deployed
+                                  ? "bg-green-100 text-green-700"
+                                  : "bg-red-100 text-red-700"
+                                  }`}
                               >
                                 {project.deployed ? "Yes" : "No"}
                               </span>
@@ -155,7 +155,7 @@ const Dashboard = () => {
                             <TableCell className="text-right">
                               {project.projectLink && (
                                 <Link to={project.projectLink}>
-                                  <Button size="sm">Visit</Button>
+                                  <Button size="sm" className={"bg-blue-600 text-white hover:bg-blue-700"}>Visit</Button>
                                 </Link>
                               )}
                             </TableCell>
@@ -178,10 +178,86 @@ const Dashboard = () => {
             </TabsContent>
           </Tabs>
 
-          
+          {/* SKILLS TABLE */}
+          <Tabs defaultValue="skills" className="w-full">
+            <TabsContent value="skills" className="mt-6">
+              <Card className="w-full shadow-sm ml-10">
+                <CardHeader className="px-8 pb-2">
+                  <CardTitle className="text-2xl font-bold">
+                    Skills & Proficiency
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 px-8 pb-8">
+                  {skills && skills.length > 0 ? (
+                    skills.map((element) => (
+                      <Card
+                        key={element._id}
+                        className="p-5 rounded-xl border hover:shadow-md transition"
+                      >
+                        {/* Title + Percentage */}
+                        <div className="flex justify-between items-center mb-3">
+                          <h3 className="text-lg font-semibold">
+                            {element.title}
+                          </h3>
+                          <span className="text-sm font-medium text-blue-600">
+                            {element.proficiency}%
+                          </span>
+                        </div>
+
+                        {/* Progress Bar */}
+                        <Progress
+                          value={element.proficiency}
+                          className="h-2 [&>div]:bg-blue-600"
+                        />
+                      </Card>
+                    ))
+                  ) : (
+                    <div className="col-span-full text-center py-12">
+                      <p className="text-xl text-muted-foreground">
+                        You haven’t added any skills yet.
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+
+          <Tabs defaultValue="software">
+            <TabsContent
+              value="software"
+              className="grid min-[1050px]:grid-cols-2 gap-4"
+            >
+              <Card className={"ml-10"}>
+                <CardHeader className="px-7">
+                  <CardTitle className={"text-2xl font-semibold"}>Software Applications</CardTitle>
+                </CardHeader>
+
+                <CardContent>
+                  <Table>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead className={"md:table-cell "}>Icon</TableHead>
+                      <TableHead className={"md:table-cell "}>Action</TableHead>
+                    </TableRow>
+
+                    <TableBody>
+                       {
+                        
+                       }
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+
+
+
         </div>
-      </main>
-    </div>
+      </main >
+    </div >
   );
 };
 
