@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -21,14 +21,82 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
-import { DeleteIcon, Trash } from "lucide-react";
+import {  Trash } from "lucide-react";
+import { clearAllSoftwareAppErrors, deleteSoftwareApplication, getAllSoftwareApplications, resetSoftwareApplicationSlice } from "@/store/slices/softwareApplications";
+import { toast } from "react-toastify";
+import { clearAllTimelineErrors } from "@/store/slices/timeline";
+import { clearAllProjectErrors } from "@/store/slices/projectSlice";
+import { clearAllSkillErrors } from "@/store/slices/skillSlice";
 
 const Dashboard = () => {
   const { user } = useSelector((state) => state.user);
-  const { projects } = useSelector((state) => state.project);
-  const { skills } = useSelector((state) => state.skill);
-  const { softwareApplications } = useSelector((state) => state.softwareApplications);
-  const { timeline } = useSelector((state) => state.timeline);
+  const {
+    skills,
+    loading: skillLoading,
+    error: skillError,
+    message: skillMessage,
+  } = useSelector((state) => state.skill);
+  const {
+    softwareApplications,
+    loading: appLoading,
+    error: appError,
+    message: appMessage,
+  } = useSelector((state) => state.softwareApplications);
+  const {
+    timeline,
+    loading: timelineLoading,
+    error: timelineError,
+    message: timelineMessage,
+  } = useSelector((state) => state.timeline);
+  const { projects, error: projectError } = useSelector(
+    (state) => state.project
+  );
+
+  const [appId, setAppId] = useState(null);
+  const handleDeleteSoftwareApp = (id) => {
+    setAppId(id);
+    dispatch(deleteSoftwareApplication(id));
+  };
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (skillError) {
+      toast.error(skillError);
+      dispatch(clearAllSkillErrors());
+    }
+    if (appError) {
+      toast.error(appError);
+      dispatch(clearAllSoftwareAppErrors());
+    }
+    if (projectError) {
+      toast.error(projectError);
+      dispatch(clearAllProjectErrors());
+    }
+    if (appMessage) {
+      toast.success(appMessage);
+      setAppId(null);
+      dispatch(resetSoftwareApplicationSlice());
+      dispatch(getAllSoftwareApplications());
+    }
+    if (timelineError) {
+      toast.error(timelineError);
+      dispatch(clearAllTimelineErrors());
+    }
+  }, [
+    dispatch,
+    skillLoading,
+    skillError,
+    skillMessage,
+    appLoading,
+    appError,
+    appMessage,
+    timelineError,
+    timelineLoading,
+    timelineMessage,
+  ]);
+
+
+
   return (
     <div className="min-h-screen bg-muted/40 p-4 sm:p-6 lg:p-8 ">
       <main className="grid gap-6 lg:grid-cols-2 xl:grid-cols-2">
@@ -238,40 +306,46 @@ const Dashboard = () => {
 
                 <CardContent>
                   <Table>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead className={"md:table-cell "}>Icon</TableHead>
-                      <TableHead className={"md:table-cell "}>Action</TableHead>
-                    </TableRow>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Icon</TableHead>
+                        <TableHead>Action</TableHead>
+                      </TableRow>
+                    </TableHeader>
 
                     <TableBody>
-                      {
-                        softwareApplications && softwareApplications.length > 0 ? (
-                          softwareApplications.map((element) => (
-                            <TableRow className={"bg-accent "} key={element._id}>
-                              <TableCell>{element.name}</TableCell>
-                              <TableCell>
-                                <img
-                                  className="w-12 h-10 "
-                                  src={element.svg && element.svg.url}
-                                  alt={element.name} />
-                              </TableCell>
-                              <TableCell>
-                                <Button className={"bg-red-600  h-10 w-10 rounded-full hover:bg-red-700"}> <Trash /></Button>
-                              </TableCell>
-                            </TableRow>
-                          ))
-                        ) : (
-                          <TableRow>
-                            <TableCell className={"text-3xl overflow-y-hidden "}>
-                              you have not added any software.
+                      {softwareApplications && softwareApplications.length > 0 ? (
+                        softwareApplications.map((element) => (
+                          <TableRow key={element._id}>
+                            <TableCell>{element.name}</TableCell>
+                            <TableCell>
+                              <img
+                                src={element.svg?.url}
+                                alt={element.name}
+                                className="w-12 h-10"
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <Button
+                                onClick={() => dispatch(deleteSoftwareApplication(element._id))}
+                                className="bg-red-600 h-10 w-10 rounded-full hover:bg-red-700"
+                              >
+                                <Trash />
+                              </Button>
                             </TableCell>
                           </TableRow>
-                        )
-                      }
-
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={3} className="text-center text-xl">
+                            You have not added any software.
+                          </TableCell>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
+
                 </CardContent>
               </Card>
 
@@ -299,7 +373,7 @@ const Dashboard = () => {
                             <TableRow key={element._id} className={"bg-accent"}>
                               <TableCell className={"font-medium "}>{element.title}</TableCell>
                               <TableCell className={"md:table-cell "}>{element.timeline.from}</TableCell>
-                              <TableCell className={"md:table-cell  text-right"}>{element.timeline.to ? `${element.timeline.to}`:"Present"}</TableCell>
+                              <TableCell className={"md:table-cell  text-right"}>{element.timeline.to ? `${element.timeline.to}` : "Present"}</TableCell>
                             </TableRow>
                           ))
                         ) : (
