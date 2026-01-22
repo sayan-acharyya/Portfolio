@@ -19,7 +19,7 @@ const App = () => {
             <Route path='/' element={<Home />} />
             <Route path='/project/:id' element={<ProjectView />} />
           </Routes>
-          <Footer />
+          {/* <Footer /> */}
            <ToastContainer position="bottom-right" theme="dark" />
         </Router>
       </ThemeProvider>
