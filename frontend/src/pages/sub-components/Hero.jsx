@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
-import { ExternalLink, Facebook, Github, Instagram, Linkedin, Twitter } from 'lucide-react';
+import { ExternalLink, Facebook, Github, Instagram, Linkedin, Mail, Phone, Twitter } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { Typewriter } from "react-simple-typewriter"
@@ -123,11 +123,29 @@ flex gap-5 items-center mt-4 md:mt-8 lg:mt-10">
                         </span>
                     </Button>
                 </a>
+                {/* Email */}
+                <a href="mailto:acharyyas735@gmail.com">
+                    <Button className="rounded-[30px] flex items-center gap-2 px-5 py-2 text-neutral-800 bg-white hover:bg-gray-200 transition-transform duration-300 hover:scale-105">
+                        <Mail className="w-5 h-5" />
+                        <span>acharyyas735@gmail.com</span>
+                    </Button>
+                </a>
+
+
+                {/* Phone */}
+                <a href="tel:+919832243680" >
+                    <Button className="rounded-[30px] flex items-center gap-2 px-5 py-2 text-neutral-800 bg-white hover:bg-gray-200 transition-transform duration-300 hover:scale-105">
+                        <Phone className="w-5 h-5" />
+                        <span>9832243680</span>
+                    </Button>
+                </a>
+
+
             </div>
-             <p className='mt-8 text-xl tracking-[2px]'>
-                 {user.aboutMe}.
-             </p>
-             <hr className='my-8 md:my-10' />
+            <p className='mt-8 text-xl tracking-[2px]'>
+                {user.aboutMe}.
+            </p>
+            <hr className='my-8 md:my-10' />
         </div>
     )
 }
