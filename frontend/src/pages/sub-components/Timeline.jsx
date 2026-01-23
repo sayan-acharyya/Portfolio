@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Calendar } from "lucide-react";
 
 const Timeline = () => {
-  const [timeline, setTimeline] = useState([]); // ✅ should be array
+  const [timeline, setTimeline] = useState([]);
 
   useEffect(() => {
     const getMyTimeline = async () => {
@@ -16,49 +17,54 @@ const Timeline = () => {
         console.error(error);
       }
     };
-
     getMyTimeline();
   }, []);
 
   return (
-    <div>
-    <h1 className="overflow-x-hidden text-[2rem] sm:text-[1.75rem] md:text-[2.2rem] lg:text-[2.8rem] mb-4 font-extrabold">Timeline</h1>
-      <ol className="relative border-s border-default">
-        {Array.isArray(timeline) &&
-          timeline.map((element, index) => (
-            <li key={index} className="mb-10 ms-6">
-              <span className="absolute flex items-center justify-center w-6 h-6 bg-brand-softer rounded-full -start-3 ring-8 ring-buffer">
-                <svg
-                  className="w-3 h-3 text-fg-brand-strong"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"
-                  />
-                </svg>
-              </span>
+    <div className="w-full py-16 px-6 sm:px-10 lg:px-24 bg-[#050B1E]">
+      <div className="max-w-4xl mx-auto">
+        
+        {/* SECTION HEADING - Refined size */}
+        <div className="mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 tracking-tight">
+            Education 
+          </h2>
+          <div className="w-12 h-1 bg-emerald-400 rounded-full"></div>
+        </div>
 
-              <time className="bg-neutral-secondary-medium border border-default-medium text-heading text-xs font-medium px-1.5 py-0.5 rounded">
-                {element.timeline.from} - {element.timeline.to || "Prersent"}
-              </time>
+        {/* TIMELINE LIST */}
+        <ol className="relative border-s border-slate-800 ml-2">
+          {Array.isArray(timeline) &&
+            timeline.map((element, index) => (
+              <li key={index} className="mb-10 ms-7 group">
+                
+                {/* ICON / DOT - Slightly smaller */}
+                <span className="absolute flex items-center justify-center w-8 h-8 bg-[#0B132E] border border-slate-700 rounded-full -start-[17px] group-hover:border-emerald-400 transition-colors duration-300 shadow-lg">
+                  <Calendar className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+                </span>
 
-              <h3 className="my-2 text-lg font-semibold text-heading">
-                {element.title}
-              </h3>
+                {/* CONTENT CARD */}
+                <div className="p-5 rounded-xl bg-[#0B132E]/40 border border-slate-800/50 backdrop-blur-sm hover:border-emerald-400/20 transition-all duration-300 group-hover:bg-[#0B132E]/60">
+                  
+                  {/* DATE BADGE - Extra small & clean */}
+                  <span className="inline-block px-2 py-0.5 mb-2 text-[10px] font-bold tracking-widest uppercase bg-emerald-400/5 text-emerald-400/80 border border-emerald-400/10 rounded">
+                    {element.timeline.from} — {element.timeline.to ? element.timeline.to : "Present"}
+                  </span>
 
-              <p className="text-body">{element.description}</p>
-            </li>
-          ))}
-      </ol>
+                  {/* TITLE - Reduced to text-lg */}
+                  <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-emerald-400 transition-colors">
+                    {element.title}
+                  </h3>
+
+                  {/* DESCRIPTION - Small text (text-sm) for a cleaner look */}
+                  <p className="text-slate-400 leading-relaxed text-sm">
+                    {element.description}
+                  </p>
+                </div>
+              </li>
+            ))}
+        </ol>
+      </div>
     </div>
   );
 };

@@ -1,87 +1,96 @@
-import React, { useEffect, useState } from 'react'
-import me from "../../../public/Me.jpeg"
-import me2 from "../../../public/Me2.jpeg"
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import me3 from "../../../public/Me3.png";
+
 const About = () => {
   const [user, setUser] = useState({});
+
   useEffect(() => {
     const getMyProfile = async () => {
-      const { data } = await axios.get("http://localhost:4000/api/v1/user/me/portfolio", { withCredentials: true });
-      setUser(data.user);
-    }
+      try {
+        const { data } = await axios.get("http://localhost:4000/api/v1/user/me/portfolio", { withCredentials: true });
+        setUser(data.user);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
     getMyProfile();
   }, []);
+
   return (
-    <div className='w-full flex flex-col overflow-x-hidden'>
-      <div className='relative'>
-        <h1
-          className="flex gap-4 items-center text-[2rem] sm:text-[2.75rem] 
-          md:text-[3rem] lg:text-[3.8rem] leading-[56px] md:leading-[67px] 
-          lg:leading-[90px] tracking-[15px] mx-auto w-fit font-extrabold about-h1"
-          style={{
-            background: "hsl(222.2 84% 4.9%)",
-          }}>
-          ABOUT <span className="text-tubeLight-effect font-extrabold">ME</span>
+    <section className="w-full min-h-screen py-12 px-6 sm:px-10 lg:px-24 bg-[#050B1E] text-white overflow-hidden">
+      
+      {/* SECTION HEADING */}
+      <div className="relative mb-16 flex flex-col items-center">
+        <h1 className="relative z-10 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-[10px] sm:tracking-[20px] text-center uppercase opacity-20 select-none">
+          ABOUT <span className="text-emerald-400">ME</span>
         </h1>
-        <span className='absolute w-full h-1 top-7 sm:top-7 md:top-8 lg:top-11 z-[-1] 
-        bg-slate-200 '></span>
+        <h2 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 text-2xl sm:text-4xl font-bold whitespace-nowrap tracking-widest text-white">
+          SAYAN <span className="text-emerald-400">ACHARYYA</span>
+        </h2>
+        <div className="w-24 h-1 bg-emerald-400 mt-4 rounded-full"></div>
       </div>
-      <div className="text-center">
-        <p className="uppercase text-xl text-slate-400">
-          Allow me to introduce myself,
-        </p>
-      </div>
-      <div>
-        <div className="grid md:grid-cols-2 my-8 sm:my-20 gap-14">
-          <div className="flex justify-center items-center">
-            <img
-              src={me2}
-              alt="Profile"
-              className="
-          bg-gray-500
-          border border-neutral-700
-          p-2 sm:p-3
-          rounded-xl
-          rotate-[18deg]
-          h-[240px] sm:h-[340px] md:h-[350px] lg:h-[450px]
-          shadow-lg
-          transition-all duration-500 ease-out
-          hover:rotate-0 hover:scale-105
-        "
-            />
+
+      <div className="max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+          
+          {/* LEFT: IMAGE BOX */}
+          <div className="relative flex justify-center items-center group">
+            {/* Background Glow behind image */}
+            <div className="absolute w-64 h-64 bg-emerald-500/20 blur-[80px] rounded-full"></div>
+            
+            <div className="relative p-3 bg-slate-800/40 border border-slate-700/50 rounded-2xl backdrop-blur-sm rotate-6 group-hover:rotate-0 transition-all duration-500 ease-in-out shadow-2xl">
+              <img
+                src={me3}
+                alt="Profile"
+                className="rounded-xl w-full max-w-[300px] lg:max-w-[400px] grayscale group-hover:grayscale-0 transition-all duration-700"
+              />
+            </div>
           </div>
-          <div className="flex justify-center flex-col tracking-[1px] text-xl gap-5">
 
-            <p>
-              I am Sayan Acharyya, a B.Tech Information Technology student at Bengal College
-              of Engineering and Technology, with a strong passion for web development and
-              hands-on experience in MERN stack applications.
-            </p>
+          {/* RIGHT: TEXT CONTENT */}
+          <div className="flex flex-col gap-6">
+            <div className="inline-block w-fit px-4 py-1 rounded-full bg-emerald-400/10 border border-emerald-400/20 text-emerald-400 text-sm font-medium">
+              Introduction
+            </div>
+            
+            <div className="space-y-5 text-slate-300 leading-relaxed text-sm sm:text-base lg:text-lg">
+              <p>
+                I am <span className="text-white font-semibold">Sayan Acharyya</span>, a B.Tech Information Technology student at Bengal College of Engineering and Technology. I have a deep-seated passion for web development and specialize in building scalable <span className="text-emerald-400">MERN stack</span> applications.
+              </p>
 
-            <p>
-              I have good proficiency in C, C++, Python, and Java, along with strong
-              fundamentals in OOP, DBMS, Operating Systems, Computer Networks, and Data
-              Structures & Algorithms. I have developed multiple real-world projects,
-              including a job portal application , LMS System and other full-stack Projects.
-            </p>
+              <p>
+                My technical toolkit includes <span className="text-white border-b border-emerald-400/30">C, C++, Python, and Java</span>. I have a solid foundation in Computer Science core subjects like OOP, DBMS, and Data Structures & Algorithms, which I apply to solve real-world problems.
+              </p>
 
-            <p>
-              Beyond academics and development, I enjoy playing cricket. I am driven,
-              consistent, and always eager to learn and apply new technologies in practical
-              projects.
-            </p>
+              <p>
+                Whether it's developing a <span className="text-white italic">Job Portal</span> or an <span className="text-white italic">LMS System</span>, I focus on writing clean, efficient code. Beyond the screen, you’ll likely find me on the cricket field, where I recharge my competitive spirit.
+              </p>
+            </div>
 
+            {/* QUICK STATS */}
+            <div className="grid grid-cols-2 gap-4 pt-6">
+              <div className="p-4 rounded-xl bg-[#0B132E] border border-slate-800">
+                <h4 className="text-emerald-400 font-bold text-xl">10+</h4>
+                <p className="text-slate-400 text-xs uppercase tracking-widest">Projects Completed</p>
+              </div>
+              <div className="p-4 rounded-xl bg-[#0B132E] border border-slate-800">
+                <h4 className="text-emerald-400 font-bold text-xl">Final</h4>
+                <p className="text-slate-400 text-xs uppercase tracking-widest">Year IT Student</p>
+              </div>
+            </div>
           </div>
         </div>
-        <p className="tracking-[1px] text-xl">
-          I am dedicated and consistent in my work, always aiming to complete tasks on
-          time. I am willing to face challenges, learn from them, and improve myself
-          continuously.
-        </p>
 
+        {/* BOTTOM MOTIVATION QUOTE */}
+        <div className="mt-20 p-8 rounded-3xl bg-gradient-to-r from-emerald-500/5 to-blue-500/5 border border-slate-800 text-center">
+          <p className="text-slate-400 italic text-base sm:text-lg lg:text-xl max-w-3xl mx-auto">
+            "I am dedicated and consistent in my work, always aiming to complete tasks on time. I am willing to face challenges, learn from them, and improve myself continuously."
+          </p>
+        </div>
       </div>
-    </div>
-  )
-}
+    </section>
+  );
+};
 
-export default About
+export default About;
