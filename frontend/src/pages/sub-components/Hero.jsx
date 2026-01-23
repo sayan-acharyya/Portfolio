@@ -124,7 +124,10 @@ flex gap-5 items-center mt-4 md:mt-8 lg:mt-10">
                     </Button>
                 </a>
             </div>
-             
+             <p className='mt-8 text-xl tracking-[2px]'>
+                 {user.aboutMe}.
+             </p>
+             <hr className='my-8 md:my-10' />
         </div>
     )
 }
